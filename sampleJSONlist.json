@@ -6,7 +6,8 @@
         "notifications": null,
         "estimatedInMinutes": 15,
         "urgent": false,
-        "potentialCOVID-19": true
+        "potentialCOVID-19": true,
+        "queuingApp": true
     },
     {
         "time": "13:45",
@@ -15,6 +16,7 @@
         "notifications": null,
         "estimatedInMinutes": 15,
         "urgent": true,
-        "potentialCOVID-19": false
+        "potentialCOVID-19": false,
+        "queuingApp": true
     }
 ]

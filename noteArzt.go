@@ -56,6 +56,7 @@ type PatientInfo struct {
 	Estimate       int            `json:"estimatedInMinutes"`
 	Urgent         bool           `json:"urgent"`
 	COVIDSuspected bool           `json:"potentialCOVID-19"`
+	QueuingApp     bool           `json:"queuingApp"`
 }
 
 func main() {
