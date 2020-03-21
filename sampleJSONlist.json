@@ -1,0 +1,20 @@
+[
+    {
+        "time": "13:30",
+        "patientId": "E73",
+        "patientName": "Max Mustermann",
+        "notifications": null,
+        "estimatedInMinutes": 15,
+        "urgent": false,
+        "potentialCOVID-19": true
+    },
+    {
+        "time": "13:45",
+        "patientId": "E74",
+        "patientName": "Eva Examplewoman",
+        "notifications": null,
+        "estimatedInMinutes": 15,
+        "urgent": true,
+        "potentialCOVID-19": false
+    }
+]
