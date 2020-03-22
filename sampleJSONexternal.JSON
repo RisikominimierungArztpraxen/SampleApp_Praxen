@@ -2,8 +2,6 @@
     {
         "time": "13:30",
         "patientId": "E73",
-        "patientName": "Max Mustermann",
-        "patientDoB": "03.07.1963",
         "notifications": [
             {
                 "type": "app",
@@ -14,25 +12,17 @@
                 "identifier": "0049159123456"
             }
         ],
-        "estimatedInMinutes": 15,
-        "urgent": false,
-        "potentialCOVID-19": true,
-        "queuingApp": true
+        "estimatedInMinutes": 15
     },
     {
         "time": "13:45",
         "patientId": "E74",
-        "patientName": "Eva Examplewoman",
-        "patientDoB": "25.02.1983",
         "notifications": [
             {
                 "type": "app",
                 "identifier": "i9oGGf1wQz"
             }
         ],
-        "estimatedInMinutes": 15,
-        "urgent": true,
-        "potentialCOVID-19": false,
-        "queuingApp": true
+        "estimatedInMinutes": 15
     }
 ]

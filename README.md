@@ -11,7 +11,16 @@ Zu diesem Zeitpunkt ist die Beispielösung bereits funktionstüchtig. Um "in pro
         "patientId": "E73",
         "patientName": "Max Mustermann",
         "patientDoB": "03.07.1963",
-        "notifications": null,
+        "notifications": [
+            {
+                "type": "app",
+                "identifier": "P51kyoH8zx"
+            },
+            {
+                "type": "sms",
+                "identifier": "0049159123456"
+            }
+        ],
         "estimatedInMinutes": 15,
         "urgent": false,
         "potentialCOVID-19": true,
@@ -24,7 +33,16 @@ Zu diesem Zeitpunkt ist die Beispielösung bereits funktionstüchtig. Um "in pro
 {
         "time": "13:30",
         "patientId": "E73",
-        "notifications": null,
-        "estimatedInMinutes": 15,
+        "notifications": [
+            {
+                "type": "app",
+                "identifier": "P51kyoH8zx"
+            },
+            {
+                "type": "sms",
+                "identifier": "0049159123456"
+            }
+        ],
+        "estimatedInMinutes": 15
     }
 ```
