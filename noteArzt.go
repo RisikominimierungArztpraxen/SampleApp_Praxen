@@ -52,6 +52,7 @@ type PatientInfo struct {
 	Time           string         `json:"time"`
 	PatientID      string         `json:"patientId"`
 	PatientName    string         `json:"patientName"`
+	PatientDoB     string         `json:"patientDoB"`
 	Notifications  []Notification `json:"notifications"`
 	Estimate       int            `json:"estimatedInMinutes"`
 	Urgent         bool           `json:"urgent"`
