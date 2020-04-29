@@ -7,7 +7,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
+	"path/filepath"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/gorilla/mux"
 )
 
@@ -18,7 +21,8 @@ type serverConfig struct {
 }
 
 // reading in the info from the config.json into a serverConfig object
-var confvar = loadConfiguration("./config.json")
+var dir = findFilePath()
+var confvar = loadConfiguration(path.Join(dir, "config.json"))
 
 var dbMockUp = make(map[string][]PatientInfo)
 
@@ -27,11 +31,36 @@ func loadConfiguration(file string) serverConfig {
 	configFile, err := os.Open(file)
 	defer configFile.Close()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 	jsonParser := json.NewDecoder(configFile)
 	jsonParser.Decode(&config)
 	return config
+}
+
+func parseNewFile(file string) {
+	var patient PatientInfo
+	newFile, err := os.Open(file)
+	defer newFile.Close()
+	if err != nil {
+		log.Println(err.Error())
+	}
+	jsonParser := json.NewDecoder(newFile)
+	jsonParser.Decode(&patient)
+	patients := dbMockUp["internal"]
+	patients = append(patients, patient)
+	dbMockUp["internal"] = patients
+	// sending it to external service
+	var info NotificationInfo
+	info.Time = patient.Time
+	info.PatientID = patient.PatientID
+	info.Notifications = patient.Notifications
+	info.Estimate = patient.Estimate
+	infoJSON, _ := json.Marshal(info)
+	// errors should be handled, POST should be encrypted
+	extLink := confvar.Host + "/" + confvar.OfficeID + "/" + "internal"
+	http.Post(extLink, "application/json", bytes.NewBuffer(infoJSON))
+	fmt.Println(string(infoJSON))
 }
 
 // NotificationInfo contains the appointment information that can be shared with the centralised app
@@ -60,7 +89,51 @@ type PatientInfo struct {
 	QueuingApp     bool           `json:"queuingApp"`
 }
 
+func findFilePath() string {
+	baseDir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return baseDir
+}
+
 func main() {
+
+	fmt.Println(dir)
+	// start filewatcher
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer watcher.Close()
+
+	go func() {
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Op.String() == "CREATE" {
+					log.Println("event:", event.Op.String())
+					parseNewFile(event.Name)
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Println("error:", err)
+			}
+		}
+	}()
+
+	log.Println(path.Join(dir, "notifications"))
+	err = watcher.Add(path.Join(dir, "notifications"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// start router
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/view/{day:[0-9]+}", view).Methods("GET")
 	router.HandleFunc("/addPatient/{day:[0-9]+}", addPatient).Methods("POST")
